@@ -1,0 +1,18 @@
+*{
+    box-sizing: border-box;
+}
+body{
+font-family: 'Dancing Script', cursive;
+font-family: 'Pacifico', cursive;
+font-family: 'Akronim', cursive;
+background-color: aquamarine;
+}
+.letter{
+    display: inline-block;
+    list-style: none;
+    width: 20px;
+    margin: 0 5px;
+    border-bottom: 1px solid black;
+    text-align: center;
+    color: blue;
+}

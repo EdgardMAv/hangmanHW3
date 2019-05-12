@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hangman the game</title>
+    <link href="https://fonts.googleapis.com/css?family=Akronim|Dancing+Script|Pacifico" rel="stylesheet">
+    <link href="hangmanHW3.css" rel="stylesheet">
+</head>
+
+<body>
+    <h1>Word Guess</h1>
+    <p> 
+
+    </p>
+    <form id="Hangman">
+        <input type="text" maxlength="3" minlength="3"
+        name="letter" id="letter"
+        placeholder="guess a letter"  />
+        <input id="guess" name="guess" type="submit"
+        value="Guess" />
+        <button id="restart" name="restart" 
+        type="button">restart</button>
+    </form>
+    <ul id="letters"></ul>
+    <p id="man"></p>
+    
+</body>
+<script>
+    (function(){
+    var availabletters
+    var words
+    var guessInput
+    var guess 
+    var guessbutton
+    var letterGuessed
+    var lettersMtached
+    var output
+    var man 
+    var letters
+    var lives
+    var currentWord
+    var numlettersMatched
+    var messages
+
+    function setup(){
+        availabletters = "abcdefghijklmnopqrstuvwxyz";
+        lives = 5;
+        words = ["dog, pitbull, husky, car, Audi, BMW, ford, "];
+        messages = {
+            win: "!YOU WIN!",
+            lose: "Ups You lost",
+            guessed: "alredy guessed, try agin...",
+            validLetter: "Correct please enter next letter"
+
+        };
+
+        letterGuessed = lettersMatched = "";
+        numlettersMatched = 0;
+
+        currentWord = words[Math.floor(Math.random()
+        * words.length)];
+
+        output = document.getElementById("output");
+        man = document.getElementById("man");
+        guessInput = document.getElementById("letter");
+
+        man.innerHTML = "you have" + "lives remaining";
+        output.innerHTML = "";
+
+        document.getElementById("letter").value = "";
+
+        guessbutton = document.getElementById("guess");
+        guessInput.style.display = "inline";
+        guessbutton.style.display = "inline";
+
+        letters = document.getElementById("letters");
+        letters.innerHTML = '<li class="current-word"><Current word:</li>';
+
+        var letter, i;
+        for(i = 0 < currentWord.length; i++){
+            letter = '<li class="letter letter' +
+            currentWord.charAt(i).toUpperCase() + '">' +
+            currentWord.charAt(i).toUpperCase() + '</li>';
+            letters.insertAdjacentHTML("beforeend",
+            letter);
+        }
+
+    }
+
+    function gameOver(win){
+        if (win){
+            output.innerHTML = messages.win;
+            output.classList.add("win");
+        }
+        else{
+            output.innerHTML = messages.lose;
+            output.classList.add("error");
+        }
+
+        guessInput.style.display = 
+        guessbutton.style.display = "none";
+        guessInput.value = "";
+    }
+
+    window.onload = setup();
+
+    document.getElementById("restart").onclick = setup;
+
+    guessInput.onclick = function(){
+        this.value = "";
+    }
+
+    document.getElementById("hangman").onsubmit = function (e){
+        if(e.preventDefault) e.preventDefault();
+        output.innerHTML = "";
+        output.classList.remove("error", "warning");
+        guess = guessInput.value;
+
+        if (guess){
+            if((lettersMtached && lettersMtached.indexOf(guess) > -1) ||  (letterGuessed && letterGuessed.indexOf(guess) > -1)) {
+                output.innerHTML = '"' +
+                guess.toUpperCase() + '"';
+                messages.guessed;
+                output.classList.add("warning");
+             }
+        }
+
+        else if (currentWord.indexOf(guess) > -1)
+        {
+            var lettersToShow;
+            lettersToShow = 
+            document.querySelectorAll(".letter" + 
+            guess.toUpperCase());
+
+            for(var i = 0; i <
+            lettersToShow.length; i++){
+                lettersToShow[i].classList.add
+                ("correct");
+            }
+            for (var j = 0; j <
+            currentWord.length; j++){
+                if (currentWord.charAt(j) === guess){
+                    numlettersMatched += 1;
+                }
+            }
+            lettersMtached += guess;
+            if (numlettersMatched === 
+            currentWord.length){
+                gameOver(true);
+                }
+            else {
+            output.classList.add("error");
+            output.innerHTML = messages.validLetter;
+        }
+        }
+        
+    else {
+        output.classList.add("error");
+        output.innerHTML = messages.validLetter;
+
+    }
+    return false;
+    };
+    
+});
+</script>
+</html>
